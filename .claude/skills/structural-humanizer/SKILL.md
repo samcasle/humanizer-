@@ -9,8 +9,12 @@ description: >-
   text at 93.2% F1, and professional stylistic rewriting moved detection only 1.6
   points. Use as the SECOND pass after the humanizer skill (which handles words and
   phrasing) whenever writing or revising LinkedIn posts, course lessons, blog posts,
-  essays, newsletters, or emails that must read as human. Triggers: "humanize",
-  "de-slop", "AI tells", "make this sound human", "structural pass", "deep humanize".
+  essays, newsletters, scripts, or emails that must read as human. Triggers:
+  "structural pass", "deep humanize", "full humanize", "AI tells", "de-slop".
+  IMPORTANT: this is pass 2. If the `humanizer` skill has not already run on this
+  text in this session, load and run it FIRST, then return here. Triggers that ask
+  for a complete job ("deep humanize", "full humanize", "de-slop") mean BOTH passes,
+  surface first.
 ---
 
 # structural-humanizer
@@ -18,6 +22,20 @@ description: >-
 Read this first. The `humanizer` skill fixes words: "delve", em dashes, rule of three,
 negative parallelism. This skill fixes what survives that pass: the structure. The two
 are different jobs, run in sequence. Surface pass first, structural pass second.
+
+## Before you start: two gates
+
+**Gate 1: has pass 1 run?** If the `humanizer` skill has not already run on this text
+in this session, stop and run it now, then come back. Running this skill alone leaves
+every surface tell in place (em dashes especially) and, worse, strips the
+no-fabrication rule that lives in the other skill's instructions. If you cannot run
+it, say so in your output rather than silently doing half the job.
+
+**Gate 2: whose facts are these?** Ask whether the text makes claims about a real
+person, company, client, product, or service. If it does, audit 4 is
+**source-only**: see the fabrication guard there. A rewrite that invents a device
+name, a duration, or a medical claim for a real business is a defect, not a
+humanization, no matter how much more human it reads.
 
 **Why this layer matters more.** StoryScope (Russell et al. 2026, arXiv:2604.03136)
 classified 61,608 stories from humans and 5 LLMs using only discourse-level features,
@@ -74,6 +92,39 @@ naming real brands or works.
 **Fix:** "a popular productivity book" becomes "Deep Work". "An expert" gets a name.
 "Recently" gets a date. Add the price, the version number, the city.
 
+**Fabrication guard (read before applying this audit).** This is the one audit that
+can damage the text, because "add a specific" and "invent a fact" produce identical
+prose. The specific must come from the source text or from the user. It is never
+yours to supply.
+
+So, in order:
+
+1. **Look in the source.** Most vague allusions are hiding a specific that appears
+   elsewhere in the same document. Promote it.
+2. **If it is not there, mark it, do not fill it.** Write
+   `[FILL: which device? which timeframe?]` and move on. A marker is a useful
+   deliverable. An invented specific is a liability that ships.
+3. **Ask the user** for the ones that matter most, in one batch, at the end.
+4. **Leaving it vague is a legitimate outcome.** "A few days" that is true beats
+   "3-4 days" that you made up. If you cannot source it, the vague version wins and
+   this audit simply does not apply to that sentence.
+
+Never invent, even when it reads better: brand or product names, device or software
+names, durations, prices, dates, counts, percentages, locations, job titles, named
+people, or anything a customer could hold the business to.
+
+**Hard stop for regulated claims.** In medical, health, aesthetic, legal, or
+financial copy, never add a capability the source does not state. Adding "skin cancer
+screening", "FDA-approved", "clinically proven", or "guaranteed" to a real
+business's script is a compliance problem, not a style improvement. If the draft
+disclaims something ("we don't diagnose"), do not add a claim elsewhere that
+contradicts the disclaimer.
+
+**Report what you marked.** End with the list of `[FILL: ...]` markers you left and
+any specific you promoted from elsewhere in the source, so the user can verify each
+one. If you added no specifics because none were sourceable, say that plainly
+instead of padding the audit.
+
 ### 5. Reader engagement
 Humans acknowledge the reader (direct address 28% vs 7%; fourth-wall permeability 67%
 vs 39%). "AI writes as though no one is watching." Content marketing already uses
@@ -101,6 +152,10 @@ break the pattern before publishing.
    just polish sentences; that is the other skill's job.
 5. **Scan:** `python3 scripts/structural_scan.py <file>` catches the pattern-matchable
    slice (embodied-emotion cliches, takeaway markers, vague allusions, uniformity).
+   The file path is a required argument; running it bare exits 2 with a usage error,
+   so write the draft to disk before scanning it. From an install, the script is at
+   `~/.claude/skills/structural-humanizer/scripts/structural_scan.py`. Note that it
+   matches substrings, so it will also flag your own `[FILL: ...]` markers and notes.
 6. **Re-check for the trap.** If the fix looks like the fix you applied yesterday,
    vary it.
 
@@ -117,7 +172,9 @@ break the pattern before publishing.
   Do not tie it back explicitly.
 - **The open thread.** Name a question you cannot answer yet and leave it standing.
 - **Genuine ambivalence.** End with both feelings intact instead of a resolved lesson.
-- **The named thing.** Swap every vague allusion for a real, checkable specific.
+- **The named thing.** Swap every vague allusion for a real, checkable specific that
+  is already in the source or comes from the user. Subject to the fabrication guard
+  in audit 4: if you cannot source it, mark it `[FILL: ...]` and leave it vague.
 - **Plain emotion.** Replace body-performance with the stated feeling.
 - **Acknowledged reader.** One moment that admits someone is reading this.
 - **End hot.** Stop at the spike instead of the quiet coda (see Claude fingerprint).

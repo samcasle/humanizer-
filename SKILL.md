@@ -413,6 +413,10 @@ Structural tells survive a surface pass almost entirely intact: professional spa
 
 Surface pass first, structural pass second.
 
+**Chaining.** If the request was for a complete job ("deep humanize", "full humanize", "de-slop", "make this sound human"), load and run `structural-humanizer` yourself as soon as this pass is done. Do not stop and wait to be asked for it, and do not report the work as finished after pass 1 alone. If `structural-humanizer` is not installed, say so explicitly rather than letting the user believe both passes ran.
+
+**Facts stay sourced across both passes.** Rule 3 above (never invent facts) governs the structural pass too. Pass 2 asks for named specifics; that is a request to promote specifics already in the source or supplied by the user, never a licence to invent a device name, duration, price, or capability. This matters most in copy about a real business, where an invented specific becomes a promise someone has to keep.
+
 For marketing copy, landing pages, product UI, or social posts, also check the copy-specific tells in [references/copy-tells.md](references/copy-tells.md), ranked by a 3.2M-post analysis of what readers actually flag. Deterministic scan for the mechanical subset:
 
 ```bash

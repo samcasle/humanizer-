@@ -405,6 +405,20 @@ When you see these, lean toward leaving the prose alone — they are evidence of
 
 In pasted-text mode, deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optionally) a short summary of changes. In file and embedded modes, run the same loop but deliver only what the mode calls for (see Invocation Modes).
 
+## This is pass 1 of 2
+
+This skill fixes words, phrasing, and punctuation. It does not fix structure.
+
+Structural tells survive a surface pass almost entirely intact: professional span-level rewriting moved AI detection by only 1.6 points in the StoryScope study (Russell et al. 2026), while structure alone detects AI text at 93.2% F1. After this pass, run **`structural-humanizer`** for stated lessons, tidy arcs, embodied-emotion performance, vague reference, and shape convergence.
+
+Surface pass first, structural pass second.
+
+For marketing copy, landing pages, product UI, or social posts, also check the copy-specific tells in [references/copy-tells.md](references/copy-tells.md), ranked by a 3.2M-post analysis of what readers actually flag. Deterministic scan for the mechanical subset:
+
+```bash
+python3 scripts/copy_scan.py <file>
+```
+
 ## Reference
 
 This skill is based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. The patterns documented there come from observations of thousands of instances of AI-generated text on Wikipedia.

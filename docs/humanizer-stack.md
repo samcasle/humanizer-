@@ -47,7 +47,29 @@ To install them globally, for every project:
 ./install.sh --force      # replace an existing install (backs it up first)
 ```
 
+On Windows, in PowerShell:
+
+```powershell
+.\install.ps1             # copies into %USERPROFILE%\.claude\skills
+.\install.ps1 -Force      # replace an existing install (backs it up first)
+.\install.ps1 -Project    # install into .\.claude\skills instead
+```
+
 Start a new agent session afterward so the skills load.
+
+### A Windows caveat
+
+`.claude/skills/humanizer/SKILL.md` is a symlink to the repo root `SKILL.md`. Git on
+Windows checks symlinks out as plain text stubs containing the target path, unless
+Developer Mode is enabled or `core.symlinks=true`. So in a Windows working tree that
+file may be a 17-byte stub rather than the skill.
+
+`install.ps1` sidesteps this by always copying the real root `SKILL.md`, and warns if
+the result looks too small. The stub only affects using this repo as a *project*
+skill directory on Windows; the installed copy is fine.
+
+Note also that Windows PowerShell 5.1 does not support `&&` as a command separator.
+Use separate lines or `;`. PowerShell 7+ supports `&&`.
 
 ## Use
 
